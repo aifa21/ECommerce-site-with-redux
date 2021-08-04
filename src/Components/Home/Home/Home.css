@@ -1,0 +1,115 @@
+.home-container{  
+    background-size: cover;
+    margin:50px;
+    z-index:1;
+}
+.home-col h1{
+    font-size: 30px;   
+    animation: showup 7s infinite;
+}
+.home-col p{
+   color:gray;
+   font-size: 14px;
+   animation: showup 7s infinite;
+}
+.home-row{
+margin-top: 70px;   
+display:flex;
+align-items: center;
+flex-wrap: wrap;
+justify-content: space-around;  
+}
+.home-col{
+    min-width:250px; 
+}
+
+.home-col img{
+    max-width: 120%;
+    height:420px;
+}
+.shop-btn{
+    padding:12px 20px;
+    background-color: #ff523b;
+    width:25%;
+    margin:15px 0;
+    font-size: 15px;
+    color:white;
+    border-radius: 30px;
+    border-style: none;
+    animation: slidein 7s infinite;
+}
+
+
+@keyframes showup {
+    0% {opacity:0;}
+    20% {opacity:1;}
+    80% {opacity:1;}
+    100% {opacity:0;}
+}
+@keyframes slidein {
+    0% { margin-left:-900px; }
+    20% { margin-left:-900px; }
+    35% { margin-left:0px; }
+    100% { margin-left:0px; }
+}
+
+
+
+@media only screen and (max-width: 768px) {
+    
+    .shop-btn{
+        padding:12px 35px;
+        background-color: #ff523b;
+        width:35%;
+        margin:15px 0;
+        font-size: 15px;
+        color:white;
+        border-radius: 30px;
+        border-style: none;
+        animation: slidein 7s infinite;
+    }
+    .home-col img{
+        margin-top: 40px;
+        width:125%;
+    }
+    .home-col h1{
+        font-size: 40px;  
+    }
+    .home-col p{
+       color:gray;
+       font-size: 18px;
+    }
+    .home-row{
+        margin-top:80px;
+        margin-left: 85px;
+        text-align: center;
+        display:flex;
+        align-items: center;
+        justify-content: center;  
+        }
+
+    
+  }
+  @media only screen and (max-width: 660px) {
+      .home-row{
+        margin-top:80px;
+      }
+      .home-col img{
+        width:125%;
+        height:250px;
+    }
+  }
+  @media only screen and (max-width: 620px) {
+    .home-row{
+      margin-right: 100px;   
+    }
+    .shop-btn{      
+         width:65%; 
+        }
+    .home-col h1{
+        font-size: 25px;      
+    }
+    .home-col p{  
+       font-size: 14px;     
+    }
+}

@@ -1,0 +1,19 @@
+.logo p{
+    font-family : 'Style Script', cursive;
+}
+.navbar-nav{
+   margin-left:auto;
+}
+.nav-item{
+    margin-right:30px;
+}
+.logo img{
+    width:60px;
+    height:60px;
+    border-radius: 80%;
+}
+.navbar ul li button{
+   background: transparent;
+   border-style: none;
+   color:rgb(155, 155, 155);
+}
