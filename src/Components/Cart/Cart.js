@@ -57,7 +57,7 @@ const Cart = (props) => {
       <p>${totalProduct}</p>
     </div>
     <div className="underline"></div>
-    <div className="d-flex justify-content-end"><button className="check-btn">Proceed Checkout</button></div>
+    <div className="d-flex justify-content-end"><Link to="/payment"><button className="check-btn">Proceed Checkout</button></Link></div>
     </div>
     :
     <Link to="/products"><button className="check-btn ml-4">Go to Shop</button></Link>
