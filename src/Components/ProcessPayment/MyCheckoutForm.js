@@ -6,7 +6,7 @@ import { useState } from 'react';
 import './Payment.css';
 import { UserContext } from '../../App';
 const MyCheckoutForm  = (props) => {
-  
+  console.log(props);
   const [loggedInUser, setLoggedInUser] = useContext(UserContext); 
     const { register, handleSubmit, errors } = useForm();
     const [paymentSuccess, setPaymentSuccess] = useState(null);
@@ -77,9 +77,13 @@ const MyCheckoutForm  = (props) => {
           />
           {errors && <span>This field is required</span>}
         <CardElement />
-        <button className="check-btn mt-5"type="submit" disabled={!stripe}>
+        {
+          props.total>0?<button className="check-btn mt-5"type="submit" disabled={!stripe}>
           Place Order
         </button>
+        :
+        <div className="mt-4"style={{background:"rgb(240, 239, 238)",marginTop:"10px"}}><p className="p-2">Your cart is empty</p></div>
+        }
         {paymentError && <p style={{ color: "red",fontSize:"15px" }}>Failed, {paymentError.message}</p>}
         {paymentSuccess && <p style={{ color: "green",fontSize:"15px" }}>Payment Successful & Booking Confirm</p>}
       </form>

@@ -9,7 +9,7 @@ import MyCheckoutForm from './MyCheckoutForm';
 import OrderDetails from './OrderDetails';
 
 const ProcessPayment= (props) => {
-  const stripePromise = loadStripe("pk_test_51HaZJzAOwZw8EHMZMFAuexZ8GMLwd1zC0VW3ASIQjK8gNDs329MpCXuKMoRH0p8eHRXjbiAmHKtucwxzxwVliDZQ00zBYC1xzG");
+  const stripePromise = loadStripe("pk-test");
   const cartItems=props.cart;
   console.log("payment",cartItems);
   let total=0;
@@ -59,43 +59,39 @@ const ProcessPayment= (props) => {
 
   return (
     <Elements stripe={stripePromise}>
-     
-     <div className="checkout">
+    <div className="checkout">
        <h3>Checkout</h3>
-     <div className="check-underline mb-5"></div>
-     <div className="container">
-      <div className="row">
-      <div className="col-md-5">
-      <div className="checkoutRight">
-       <div className="order-box">
+    <div className="check-underline mb-5"></div>
+    <div className="container">
+    <div className="row">
+    <div className="col-md-5">
+    <div className="order-box">
        <h4 className="order_review_heading ">Your Order</h4>
-      <div className="order-review">
-
-      <table className="checkout-table">
+    <div className="order-review">
+    <table className="checkout-table">
       <thead>
       <tr>
-        <th className="pl-2">Product</th>
-        <th >Subtotal</th>
+      <th className="pl-2">Product</th>
+      <th >Subtotal</th>
       </tr>
       </thead>
-      <tbody>
-     {
-      cartItems.map(ct=><OrderDetails key={ct.key} cartItems={ct}> </OrderDetails>)
-      }   
+    <tbody>
+    {
+    cartItems.map(ct=><OrderDetails key={ct.key} cartItems={ct}> </OrderDetails>)
+    }   
       <tr>
-        <td style={{fontWeight:"600",color:"#000",fontSize:"15px"}}>Total</td>
-        <td>{totalProduct}</td>
+      <td style={{fontWeight:"600",color:"#000",fontSize:"15px"}}>Total</td>
+      <td>{totalProduct}</td>
       </tr>
     </tbody>
-     </table>
+    </table>
     </div>
-       </div>
     </div>
-     </div>
-     <div className="offset-md-1"></div>
+    </div>
+    <div className="offset-md-1"></div>
     <div className="col-md-6">
     <div className="checkout-section">
-    <MyCheckoutForm cartItems={cartItems} total={total}/>
+    <MyCheckoutForm cartItems={cartItems} total={totalProduct}/>
     </div>
     </div>
     </div>
