@@ -27,70 +27,13 @@ import Footer from './Components/Footer/Footer';
 import ProcessPayment from './Components/ProcessPayment/ProcessPayment';
 import PrivateRoute from './Components/Login/PrivateRoute';
 export const UserContext = createContext();
-export const CartContext = createContext();
+
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({});
-  const [cart, setCart] = useState([]);
-
-  console.log("appcar=",cart);
-  useEffect(()=>{
-    const savedCart = getDatabaseCart();
-    const productKeys = Object.keys(savedCart);
-    const previousCart = productKeys.map( existingKey => {
-    const product = fakeData.find( pd => pd.key === existingKey);
-    product.quantity = savedCart[existingKey];
-    return product;
-    } )
-    setCart(previousCart);
-}, [])
-  const onAdd = (product) => {
-    console.log("added",product);
-    const keyAdded=product.key;
-    const sameProduct=cart.find(pd=>pd.key===keyAdded);
-    let count=1;
-    let newCart;
-    if(sameProduct){   
-      count= sameProduct.quantity+1;
-      sameProduct.quantity=count;
-      const others=cart.filter(pd=>pd.key!==keyAdded);
-      newCart=[...others,sameProduct];
-    }
-    else{
-      product.quantity=1;
-      newCart=[...cart,product];
-
-    }
-   setCart(newCart);
-   addToDatabaseCart(product.key, count);
-  };
-  const onRemove = (product) => {
-    console.log("sub",product);
-    const exist = cart.find((x) => x.key === product.key);
-    console.log("subexit",exist);
-    let newCart;
-    if (exist.quantity === 1) {
-     setCart(cart.filter((x) => x.key !== product.key));
-     removeFromDatabaseCart(product.key);
-    } else {
-     let count= exist.quantity-1;      
-      setCart(
-        cart.map((x) =>
-          x.key === product.key ? { ...exist, quantity: count } : x
-        )
-      );
-      addToDatabaseCart(product.key, count);
-    }
-  };
-  const removeOne=(productKey)=>{
-    console.log("removeone");
-    const newCart = cart.filter((pd) => pd.key !== productKey);
-    setCart(newCart);
-    removeFromDatabaseCart(productKey);
-   
-  }
+  
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
-    <CartContext.Provider value={[cart, setCart]}>
+   
     <Router>   
     <Switch>     
     <Route path="/home">
@@ -103,17 +46,17 @@ function App() {
     </Route>
     <Route path="/products">
     <Header></Header>
-    <AllProducts onAdd={onAdd}></AllProducts>
+    <AllProducts ></AllProducts>
     <Footer></Footer>
     </Route>
     <Route path="/product/:productKey">
     <Header></Header>
-    <ProductDetail onAdd={onAdd} onRemove={onRemove} removeOne={removeOne}></ProductDetail>
+    <ProductDetail  ></ProductDetail>
     <Footer></Footer> 
     </Route>
      <Route path="/cart">
      <Header></Header>
-      <Cart cart={cart} onAdd={onAdd} onRemove={onRemove} removeOne={removeOne}></Cart>
+      <Cart  ></Cart>
       <Footer></Footer>
     </Route>  
     <Route path="/footer">
@@ -122,7 +65,7 @@ function App() {
     </Route>
     <PrivateRoute path="/payment">
     <Header></Header>
-     <ProcessPayment cart={cart}></ProcessPayment>
+     <ProcessPayment></ProcessPayment>
     </PrivateRoute>
     <Route path="/login">
     <Header></Header>
@@ -131,7 +74,7 @@ function App() {
     
     </Switch>
     </Router>
-    </CartContext.Provider>
+    
     </UserContext.Provider>
   );
 }

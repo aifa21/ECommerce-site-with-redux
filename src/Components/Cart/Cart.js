@@ -3,14 +3,16 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../../App';
 import './Cart.css';
+import { connect } from "react-redux";
 import CartDetails from './CartDetails';
+import { addToCart, loadCurrentItem, removeFromCart, removeOne } from '../../redux/Shopping/shopping-action';
 const Cart = (props) => {
-   const cartItems=props.cart;
-    console.log("CART=",cartItems);
+  const {cart,addToCart,removeFromCart,removeOne }=props;
+    console.log("CART=",cart);
     let total=0;
-    for(let i=0;i<cartItems.length;i++){
-        const product=cartItems[i];  
-        total=total+product.price*product.quantity||1;
+    for(let i=0;i<cart.length;i++){
+        const product=cart[i];  
+        total=total+product.price*product.qty||1;
          }
     let totalProduct=(Number(total)).toFixed(2);
     return (
@@ -33,13 +35,13 @@ const Cart = (props) => {
      </div>
      <div className="underline"></div>
         {
-        cartItems.length ?
-        cartItems.map(ct=><CartDetails 
+        cart.length ?
+        cart.map(ct=><CartDetails 
                           key={ct.key} 
-                          onAdd={props.onAdd} 
-                          onRemove={props.onRemove}
+                          addToCart={addToCart}
+                          removeFromCart={removeFromCart } 
+                          removeOne={removeOne } 
                           cartItems={ct}
-                          removeOne={props.removeOne}
                            > 
                           </CartDetails>)
   :
@@ -48,7 +50,7 @@ const Cart = (props) => {
    </div>
   <div className="cart-bottom">
   {
-    cartItems.length>0?
+    cart.length>0?
     <div className="m-4">
     <div className="cart-header"><h3>Cart Total</h3></div>
    
@@ -68,4 +70,18 @@ const Cart = (props) => {
     );
 };
 
-export default Cart;
+const mapStateToProps = (state) => {
+  return {
+    cart: state.shop.cart,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (key) => dispatch(addToCart(key)),
+    removeFromCart:(key)=>dispatch(removeFromCart(key)),
+    removeOne:(key)=>dispatch(removeOne(key)),
+    loadCurrentItem: (item) => dispatch(loadCurrentItem(item)),
+  };
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(Cart);

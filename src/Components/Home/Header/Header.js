@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -13,16 +13,23 @@ import Drawer from '@material-ui/core/Drawer';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import Badge from '@material-ui/core/Badge';
 import YourCart from "../YourCart/YourCart";
-
-const Header = () => {
+import { connect } from "react-redux";
+import { adjustItemQty } from "../../../redux/Shopping/shopping-action";
+const Header = ({cart,adjustQty}) => {
+ 
   const [loggedInUser,setLoggedInUser]=useContext(UserContext);
-  const [cart, setCart ]= useContext(CartContext);
   const [cartOpen,setCartOpen]=useState(false);
-  console.log("headCart",typeof(cart));
-  let total;
-  if(cart.length){
-    total=cart.reduce((total,prd)=>total+prd.quantity,0);
-  } 
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    let count = 0;
+    cart.forEach((item) => {
+      console.log("item=",item);
+      count += item.qty;
+    });
+
+    setCartCount(count);
+  }, [cart, cartCount]);
   
   return (
    <div>
@@ -49,7 +56,7 @@ const Header = () => {
     :
     <li className="nav-item"><a className="nav-link mr-5 " href="/login">Login</a></li>
     }
-    <li className="mt-2"><button onClick={()=>setCartOpen(true)}> <Badge badgeContent={total} color='error'><AddShoppingCartIcon/></Badge></button></li>
+    <li className="mt-2"><button onClick={()=>setCartOpen(true)}> <Badge badgeContent={cartCount} color='error'><AddShoppingCartIcon/></Badge></button></li>
     </ul>
         </div>
        </div>
@@ -58,4 +65,15 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    cart: state.shop.cart,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {   
+    adjustQty: (key, value) => dispatch(adjustItemQty(key, value)),  
+  };
+};
+
+export default connect(mapStateToProps,mapDispatchToProps )(Header);

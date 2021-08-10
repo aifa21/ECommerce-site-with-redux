@@ -13,40 +13,33 @@ import './ProductDetails.css';
 import gif from '../../../images/Loading_icon.gif';
 import fakeData from '../../fakeData';
 import { Facebook } from '@material-ui/icons';
+import { connect } from 'react-redux';
+import { addToCart, adjustItemQty, loadCurrentItem, removeFromCart, removeOne } from '../../../redux/Shopping/shopping-action';
 const ProductDetail = (props) => {
-   // const [cart, setCart] = useContext(CartContext);
+  const {cart,addToCart,removeFromCart,removeOne,adjustQty }=props;
     const {productKey}=useParams();
-    const [loading,setLoading]=useState(true);
-   // const [product,setProduct]=useState({});
-   
     const product=fakeData.find(pd=>pd.key===productKey);
-     console.log(product);
-     let quantity=1;
-     if(product.quantity>1){
-       quantity=1;
-       quantity=product.quantity;
-     }
-     else
-    {
-      quantity=1;
-    } 
-    function myFunction() {
-      alert("I am an alert box!");
-    }
+    const productCart=cart.find(pd=>pd.key===productKey);
+    console.log(productCart);
+    const [loading,setLoading]=useState(true);
+  
+
+  function myFunction() {
+  alert("I am an alert box!"); }
+
     return (
     <section className="section product-detail">
-   
     {/* {loading?<div className="spinnerImg">
         <img src={gif} className="spinnerImg" />
         </div>
         : */}
-      <div className="headBorder">
-        <div className="headBorderInfo">
-        <Link className="Link"to="/home">Home</Link>
-        <span className="m-2 ">/</span> <Link className="Link"to="/Products"> Product </Link><span className="m-2">/</span>
-        <p> {product.name}</p>
-         </div>
-      </div>   
+    <div className="headBorder">
+    <div className="headBorderInfo">
+    <Link className="Link"to="/home">Home</Link>
+    <span className="m-2 ">/</span> <Link className="Link"to="/Products"> Product </Link><span className="m-2">/</span>
+    <p> {product.name}</p>
+    </div>
+    </div>   
     <div className="container product-detail-container">
     <div className="row">
     <div className="col-md-6 left">
@@ -58,12 +51,14 @@ const ProductDetail = (props) => {
     <p className="price">${product.price}</p>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero minima delectus nulla voluptates nesciunt
     quidem laudantium, quisquam voluptas facilis dicta in explicabo, laboriosam ipsam suscipit!</p>
-    <div className="button-group">
-    <button onClick={()=>props.onAdd(product)}>+</button>
-    <span className="mx-2"style={{fontSize:"14px"}}>{quantity}</span>  
-    <button onClick={()=>props.onRemove(product)}>-</button>
    
-    </div>
+   <div className="button-group">
+   <span className="mx-2"style={{fontSize:"14px"}}>
+   <button onClick={()=>props.addToCart(productKey)}>+</button>
+   {productCart? productCart.qty:0}
+   <button onClick={()=>props.removeOne(productKey)}> -</button>
+    </span>  
+   </div>
    <div className="share">
    <p>Share This Product:</p>
     <ul>
@@ -75,9 +70,26 @@ const ProductDetail = (props) => {
         </div>
     </div>
   {/* } */}  
+
+  
             </div>   
     </section>
     );
 };
 
-export default ProductDetail;
+const mapStateToProps = (state) => {
+  return {
+    cart: state.shop.cart,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (key) => dispatch(addToCart(key)),
+    removeFromCart:(key)=>dispatch(removeFromCart(key)),
+    removeOne:(key)=>dispatch(removeOne(key)),
+    adjustQty: (key, value) => dispatch(adjustItemQty(key, value)),
+    loadCurrentItem: (item) => dispatch(loadCurrentItem(item)),
+  };
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(ProductDetail);

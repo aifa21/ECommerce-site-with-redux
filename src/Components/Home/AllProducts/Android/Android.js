@@ -4,10 +4,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus,faHeart,faEye } from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
 import Drawer from '@material-ui/core/Drawer';
+import { connect } from "react-redux";
+import {
+  loadCurrentItem,
+  addToCart,
+} from "../../../../redux/Shopping/shopping-action";
 
-
-const Android = (props) => {
-  const { img, key,name, price, category,seller} = props.android;
+const Android = ({ android, addToCart, loadCurrentItem }) => {
+  const { img, key,name, price, category,seller} = android;
   const [cartOpen,setCartOpen]=useState(false);
   return (
     <div className="android-container">
@@ -17,7 +21,7 @@ const Android = (props) => {
     </div>
     <div className="contentBx">
     <h4>Price : ${price}</h4>
-    <button onClick={()=>props.onAdd(props.android)}><FontAwesomeIcon className="icon" icon={faCartPlus} /></button>
+    <button onClick={()=>addToCart(key)}><FontAwesomeIcon className="icon" icon={faCartPlus} /></button>
     <button ><FontAwesomeIcon className="icon" icon={faHeart} /></button>
     <Link to={"/product/"+key} style={{ textDecoration: 'none',color:'darkBlue' }} ><button><FontAwesomeIcon className="icon"icon={faEye} /></button></Link>
     
@@ -29,4 +33,11 @@ const Android = (props) => {
   );
 };
 
-export default Android;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (key) => dispatch(addToCart(key)),
+    loadCurrentItem: (item) => dispatch(loadCurrentItem(item)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Android);

@@ -4,22 +4,18 @@ import { CartContext } from '../../../App';
 import { removeFromDatabaseCart } from '../../../utilities/databaseManager';
 import './YourCart.css';
 import YourCartDetails from './YourCartDetails';
-
+import { connect } from "react-redux";
+import { removeFromCart } from '../../../redux/action/cartAction';
+import { loadCurrentItem } from '../../../redux/Shopping/shopping-action';
 const YourCart = (props) => {
-    const [cart, setCart ]= useContext(CartContext);
-    const cartItems=props.cart;
-    let total=0;
-    for(let i=0;i<cartItems.length;i++){
-        const product=cartItems[i];  
-        total=total+product.price*product.quantity||1;
+  const {cart}=props;
+
+   let total=0;
+    for(let i=0;i<cart.length;i++){
+        const product=cart[i];  
+        total=total+product.price*product.qty||1;
          }
     let totalProduct=(Number(total)).toFixed(2);
-
-    const removeOne=(productKey)=>{
-      const newCart = cart.filter((pd) => pd.key !== productKey);
-      setCart(newCart);
-      removeFromDatabaseCart(productKey);
-    }
     return (
     <div className="yourCart">
         <h2>Your Cart</h2>
@@ -29,7 +25,11 @@ const YourCart = (props) => {
      ?
      <div className="yourCart2">
     {
-     cart.map(ct=><YourCartDetails cart={ct} removeOne={removeOne}></YourCartDetails>)
+     cart.map(ct=><YourCartDetails  
+                    key={ct.key}  
+                    cartItems={ct} 
+                   >
+                    </YourCartDetails>)
     }
      </div>     
     :
@@ -52,4 +52,10 @@ const YourCart = (props) => {
     );
 };
 
-export default YourCart;
+const mapStateToProps = (state) => {
+    return {
+      cart: state.shop.cart,
+    };
+  };
+ 
+  export default connect(mapStateToProps)(YourCart);

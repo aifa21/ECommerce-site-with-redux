@@ -2,7 +2,7 @@ import React from 'react';
 import './Payment.css';
 const OrderDetails = (props) => {
     const order=props.cartItems;
-    const subtotal=order.price*order.quantity;
+    const subtotal=order.price*order.qty;
     return (
         <tr className=" d-flex justify-content-between">
         <td className="product-name">{order.name}</td>

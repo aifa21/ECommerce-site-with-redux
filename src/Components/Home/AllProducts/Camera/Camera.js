@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import "../Android/Android.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus,faHeart,faEye } from "@fortawesome/free-solid-svg-icons";
-const Camera = (props) => {
-    const { img, key,name, price, category,seller } = props.camera;
+import { connect } from 'react-redux';
+import { addToCart, loadCurrentItem } from '../../../../redux/Shopping/shopping-action';
+const Camera = ({ camera, addToCart, loadCurrentItem }) => {
+    const { img, key,name, price, category,seller } = camera;
   const [cartOpen,setCartOpen]=useState(false);
     return (
       <div className="android-container">
@@ -14,7 +16,7 @@ const Camera = (props) => {
       </div>
       <div className="contentBx">
       <h4>Price : ${price}</h4>
-      <button onClick={()=>props.onAdd(props.camera)}><FontAwesomeIcon className="icon" icon={faCartPlus} /></button>
+      <button  onClick={()=>addToCart(key)}><FontAwesomeIcon className="icon" icon={faCartPlus} /></button>
       <button ><FontAwesomeIcon className="icon" icon={faHeart} /></button>
       <Link to={"/product/"+key} style={{ textDecoration: 'none',color:'darkBlue' }} ><button><FontAwesomeIcon className="icon" icon={faEye} /></button></Link>
       
@@ -24,4 +26,11 @@ const Camera = (props) => {
     );
 };
 
-export default Camera;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (key) => dispatch(addToCart(key)),
+    loadCurrentItem: (item) => dispatch(loadCurrentItem(item)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Camera);

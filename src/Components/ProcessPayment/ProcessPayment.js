@@ -7,17 +7,18 @@ import { loadStripe } from "@stripe/stripe-js";
 import './Payment.css';
 import MyCheckoutForm from './MyCheckoutForm';
 import OrderDetails from './OrderDetails';
+import { connect } from 'react-redux';
 
 const ProcessPayment= (props) => {
   const stripePromise = loadStripe("pk-test");
-  const cartItems=props.cart;
-  console.log("payment",cartItems);
-  let total=0;
-  for(let i=0;i<cartItems.length;i++){
-      const product=cartItems[i];  
-      total=total+product.price*product.quantity||1;
-       }
-  let totalProduct=(Number(total)).toFixed(2);
+  const {cart}=props;
+    console.log("CART=",cart);
+    let total=0;
+    for(let i=0;i<cart.length;i++){
+        const product=cart[i];  
+        total=total+product.price*product.qty||1;
+         }
+    let totalProduct=(Number(total)).toFixed(2);
   // const onSubmit = async (event) => {
   //   event.startDate=props.allData.startDate;
   //   event.endDate=props.allData.endDate;
@@ -77,7 +78,7 @@ const ProcessPayment= (props) => {
       </thead>
     <tbody>
     {
-    cartItems.map(ct=><OrderDetails key={ct.key} cartItems={ct}> </OrderDetails>)
+    cart.map(ct=><OrderDetails key={ct.key} cartItems={ct}> </OrderDetails>)
     }   
       <tr>
       <td style={{fontWeight:"600",color:"#000",fontSize:"15px"}}>Total</td>
@@ -91,7 +92,7 @@ const ProcessPayment= (props) => {
     <div className="offset-md-1"></div>
     <div className="col-md-6">
     <div className="checkout-section">
-    <MyCheckoutForm cartItems={cartItems} total={totalProduct}/>
+    <MyCheckoutForm cartItems={cart} total={totalProduct}/>
     </div>
     </div>
     </div>
@@ -101,4 +102,9 @@ const ProcessPayment= (props) => {
    
   );
 };
-export default ProcessPayment;
+const mapStateToProps = (state) => {
+  return {
+    cart: state.shop.cart,
+  };
+};
+export default connect(mapStateToProps)(ProcessPayment);
